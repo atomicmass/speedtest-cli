@@ -1815,6 +1815,7 @@ def validate_optional_args(args):
 def printer(string, quiet=False, debug=False, error=False, **kwargs):
     """Helper function print a string with various features"""
 
+    global OUTPUT
     if debug and not DEBUG:
         return
 
@@ -1838,7 +1839,7 @@ def printer(string, quiet=False, debug=False, error=False, **kwargs):
 def shell():
     """Run the full speedtest.net test"""
 
-    OUTPUT = ""
+    global OUTPUT
     global DEBUG
     shutdown_event = threading.Event()
 
