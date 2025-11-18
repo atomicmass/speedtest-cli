@@ -59,6 +59,7 @@ PY25PLUS = sys.version_info[:2] >= (2, 5)
 PY26PLUS = sys.version_info[:2] >= (2, 6)
 PY32PLUS = sys.version_info[:2] >= (3, 2)
 PY310PLUS = sys.version_info[:2] >= (3, 10)
+OUTPUT = ""
 
 # Begin import game to handle Python 2 and Python 3
 try:
@@ -1831,6 +1832,8 @@ def printer(string, quiet=False, debug=False, error=False, **kwargs):
     if not quiet:
         print_(out, **kwargs)
 
+    OUTPUT += out + "\n"
+
 
 def shell():
     """Run the full speedtest.net test"""
@@ -1997,6 +2000,8 @@ def shell():
 def main():
     try:
         shell()
+
+        print_(OUTPUT)
     except KeyboardInterrupt:
         printer('\nCancelling...', error=True)
     except (SpeedtestException, SystemExit):
