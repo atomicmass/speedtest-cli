@@ -1838,6 +1838,7 @@ def printer(string, quiet=False, debug=False, error=False, **kwargs):
 def shell():
     """Run the full speedtest.net test"""
 
+    OUTPUT = ""
     global DEBUG
     shutdown_event = threading.Event()
 
@@ -1996,12 +1997,12 @@ def shell():
     if args.share and not machine_format:
         printer('Share results: %s' % results.share())
 
+    print(OUTPUT)
+
 
 def main():
     try:
         shell()
-
-        print_(OUTPUT)
     except KeyboardInterrupt:
         printer('\nCancelling...', error=True)
     except (SpeedtestException, SystemExit):
