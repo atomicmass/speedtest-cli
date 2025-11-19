@@ -28,6 +28,9 @@ import sys
 import threading
 import timeit
 import xml.parsers.expat
+import boto3
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 try:
     import gzip
@@ -1835,6 +1838,34 @@ def printer(string, quiet=False, debug=False, error=False, **kwargs):
 
     OUTPUT += out + "\n"
 
+def check_result():
+    global OUTPUT
+
+    lines = OUTPUT.splitlines()
+    for line in lines:
+        if line.startswith("Download:"):
+            download_speed = float(line.split()[1])
+        elif line.startswith("Upload:"):
+            upload_speed = float(line.split()[1])
+
+    if download_speed < 90 or upload_speed < 90:
+        email = "Dowwnload speed is " + str(download_speed) + " Mbit/s and upload speed is " + str(upload_speed) + " Mbit/s"
+        send_email(email)
+
+def send_email(body):
+    ses = boto3.client('ses', region_name='af-south-1')
+
+    msg = MIMEMultipart()
+    msg['Subject'] = 'Webafrica Data Speed Dropped'
+    msg['From'] = os.environ.get('RECIPIENT')
+    msg['To'] = os.environ.get('RECIPIENT')
+
+    # Body
+    msg.attach(MIMEText(body, 'plain'))
+
+    resp = ses.send_raw_email(RawMessage={'Data': msg.as_string()})
+    print('MessageId:', resp['MessageId'])
+
 
 def shell():
     """Run the full speedtest.net test"""
@@ -1998,7 +2029,7 @@ def shell():
     if args.share and not machine_format:
         printer('Share results: %s' % results.share())
 
-    print(OUTPUT)
+
 
 
 def main():
