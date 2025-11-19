@@ -1848,9 +1848,10 @@ def check_result():
         elif line.startswith("Upload:"):
             upload_speed = float(line.split()[1])
 
-    if download_speed < 90 or upload_speed < 90:
-        email = "Dowwnload speed is " + str(download_speed) + " Mbit/s and upload speed is " + str(upload_speed) + " Mbit/s"
+    if download_speed < 100 or upload_speed < 90:
+        email = "Download speed is " + str(download_speed) + " Mbit/s and upload speed is " + str(upload_speed) + " Mbit/s"
         send_email(email)
+        print('Email sent')
 
 def send_email(body):
     ses = boto3.client('ses', region_name='af-south-1')
@@ -2028,6 +2029,8 @@ def shell():
 
     if args.share and not machine_format:
         printer('Share results: %s' % results.share())
+
+    check_result()
 
 
 
