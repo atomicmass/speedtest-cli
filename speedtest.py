@@ -29,6 +29,7 @@ import threading
 import timeit
 import xml.parsers.expat
 import boto3
+from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -1854,6 +1855,7 @@ def check_result():
         print('Email sent')
 
 def send_email(body):
+    load_dotenv() 
     ses = boto3.client('ses', region_name='af-south-1')
 
     msg = MIMEMultipart()
