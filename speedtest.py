@@ -1849,7 +1849,7 @@ def check_result():
         elif line.startswith("Upload:"):
             upload_speed = float(line.split()[1])
 
-    if download_speed < 100 or upload_speed < 100:
+    if download_speed < 85 or upload_speed < 85:
         email = "Download speed is " + str(download_speed) + " Mbit/s and upload speed is " + str(upload_speed) + " Mbit/s"
         send_email(email)
         print('Email sent')
